@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem \"C:\\\\Users\\\\jmj\\\\.connect-ai-brain\" -Recurse -Depth 3)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(mkdir -p \"C:\\\\Users\\\\jmj\\\\.claude\\\\projects\\\\c--Users-jmj-Desktop--------new\\\\memory\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\jmj\\.claude\\projects\\c--Users-jmj-Desktop--------new\\memory"
+    ]
+  }
+}
