@@ -101,3 +101,14 @@
 | 3선 | BitcoinReporter | ✅ 성공 | 6개 | `2026-05-23_CoinDesk_트레이더 분석_ 하이퍼리퀴드와 AI 토큰이 차기 알트코인 랠리를 주도할 전망.md`, `2026-05-23_CoinDesk_클래리티 법안(Clarity Act) 통과가 크립토 '수익률 서비스(Yield-as-a-service)' 시장의 폭발적 성장을 촉발할 전망.md`, `2026-05-23_CoinTelegraph_바이낸스, 이란 연계 거래 의혹 부인_ WSJ 보도에 대한 공식 입장 표명.md` 외 3건 | - | 42.7초 |
 | 4선 | WikiManager | ✅ 성공 | 12개 | `Korea-Economy_draft.md`, `Korea-Economy_draft.md`, `US-Fed_draft.md` 외 9건 | - | 251.2초 |
 
+
+## 📊 [2026-05-24 04:06:48] 릴레이 실행 결과표 | 총 5단계 완료 (성공: 5/5, 총 소요: 736.2초)
+
+| 단계 | 에이전트명 | 상태 | 처리/수집 건수 | 생성 및 갱신 파일 | 에러 및 경고 내용 | 소요 시간 |
+| :---: | :--- | :---: | :---: | :--- | :--- | :---: |
+| 0선 | DBManager | ✅ 성공 | 6개 | `financial_data.json` | - | 1.3초 |
+| 1선 | KoreaReporter | ✅ 성공 | 0개 | - | - | 4.3초 |
+| 2선 | GlobalReporter | ✅ 성공 | 0개 | - | - | 2.9초 |
+| 3선 | BitcoinReporter | ✅ 성공 | 0개 | - | - | 5.5초 |
+| 4선 | WikiManager | ✅ 성공 | 12개 | `Korea-Economy_draft.md`, `Korea-Economy_draft.md`, `US-Fed_draft.md` 외 9건 | - | 509.3초 |
+
