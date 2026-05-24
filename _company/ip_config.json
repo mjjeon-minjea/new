@@ -1,0 +1,6 @@
+{
+  "registered_ip": "175.198.141.112",
+  "registered_at": "2026-05-24",
+  "note": "Upbit Open API 허용 IP. IP 변경 시 Upbit 웹 > My > Open API 관리에서 재등록 필요.",
+  "upbit_api_url": "https://upbit.com/service_center/open_api_guide"
+}

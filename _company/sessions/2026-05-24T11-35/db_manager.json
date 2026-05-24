@@ -1,15 +1,15 @@
 {
-  "btc_krw": 114923000.0,
-  "btc_krw_change": 0.05,
-  "btc_usd": 76825.79,
+  "btc_krw": 114900000.0,
+  "btc_krw_change": 0.03,
+  "btc_usd": 76842.3,
   "exchange_rate": 1516.19,
   "bok_rate": 3.5,
-  "kimchi_premium": -1.34,
+  "kimchi_premium": -1.38,
   "altcoins": {
     "ETH": {
-      "krw": 3179000.0,
-      "usd": 2096.7052,
-      "change": 0.38
+      "krw": 3175000.0,
+      "usd": 2094.067,
+      "change": 0.25
     },
     "XRP": {
       "krw": 2034.0,
@@ -22,9 +22,9 @@
       "change": 0.08
     },
     "SAND": {
-      "krw": 106.0,
-      "usd": 0.0699,
-      "change": -0.93
+      "krw": 107.0,
+      "usd": 0.0706,
+      "change": 0.0
     },
     "MANA": {
       "krw": 130.0,
@@ -37,10 +37,10 @@
       "change": 0.65
     },
     "WAVES": {
-      "krw": 616.0,
-      "usd": 0.4063,
-      "change": 7.13
+      "krw": 619.0,
+      "usd": 0.4083,
+      "change": 7.65
     }
   },
-  "updated_at": "2026-05-24 11:45:04"
+  "updated_at": "2026-05-24 11:35:50"
 }

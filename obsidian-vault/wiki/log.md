@@ -25,9 +25,6 @@
 ## [2026-05-23 05:24:30] ingest | [[raw/2026-05-22_Decrypt_AI Deepfake Porn Lawsuit_ Two Men Charged Over Illegal Content.md]] 수집 및 [[Bitcoin]] 위키 페이지 갱신
 ## [2026-05-23 05:24:49] ingest | [[raw/2026-05-22_CoinTelegraph_US House probes Kalshi, Polymarket over insider trading claims.md]] 수집 및 [[Bitcoin]] 위키 페이지 갱신
 ## [2026-05-23 05:25:07] ingest | [[raw/2026-05-22_CoinTelegraph_US House probes Kalshi, Polymarket over insider trading claims.md]] 수집 및 [[Bitcoin]] 위키 페이지 갱신
-## [2026-05-23 05:36:14] ingest | [[raw/2026-05-22_Decrypt_Microsoft's Free AI Just Beat OpenAI and Google at Browsing the Web.md]] 수집 및 [[Bitcoin]] 위키 페이지 갱신
-## [2026-05-23 05:50:09] ingest | [[raw/2026-05-22_Decrypt_SEC Delays Tokenized Stocks Innovation Exemption Amid Concerns_ Bloomberg.md]] 수집 및 [[Bitcoin]] 위키 페이지 갱신
-## [2026-05-23 14:30:00] ingest | [[raw/2026-05-22_Decrypt_Kash Patel-Linked Apparel Store Goes Dark After Pushing Crypto-Stealing Malware.md]] 수집 및 [[Bitcoin]] 위키 페이지 갱신
 ## [2026-05-23 14:30:21] ingest | [[raw/2026-05-23_CoinTelegraph_스테이지, 2033까지 비트코인 투자 목표 확정.md]] 수집 및 [[Bitcoin]] 위키 페이지 갱신
 ## [2026-05-23 14:30:41] ingest | [[raw/2026-05-23_CoinTelegraph_이더리움은 DeFi, 안정형 코인 및 스테킹에서의 우위를 강화하며 장기적인 ETH 구매에 대한 주장을 더욱 강조.md]] 수집 및 [[Bitcoin]] 위키 페이지 갱신
 ## [2026-05-23 14:31:00] ingest | [[raw/2026-05-23_Google News Global_5월 셋째 주 세계 경제 동향_ 코스피 7,800선 돌파, 한미 증시 동반 강세.md]] 수집 및 [[US-Fed]] 위키 페이지 갱신
@@ -199,4 +196,15 @@
 | 2선 | GlobalReporter | ✅ 성공 | 0개 | - | - | 3.1초 |
 | 3선 | BitcoinReporter | ✅ 성공 | 0개 | - | - | 4.5초 |
 | 4선 | WikiManager | ⚠️ 경고 | 26개 | `Korea-Economy_draft.md`, `Korea-Economy_draft.md`, `US-Fed_draft.md` 외 23건 | Ollama 분석 결과물이 없거나 너무 짧아 갱신을 생략합니다 (2026-05-23_CoinTelegraph_바이낸스, 이란 연계 거래 의혹 부인_ WSJ 보도에 대한 공식 입장 표명.md) | 581.3초 |
+
+
+## 📊 [2026-05-24 11:28:17] 릴레이 실행 결과표 | 총 5단계 완료 (성공: 4/5, 총 소요: 579.6초)
+
+| 단계 | 에이전트명 | 상태 | 처리/수집 건수 | 생성 및 갱신 파일 | 에러 및 경고 내용 | 소요 시간 |
+| :---: | :--- | :---: | :---: | :--- | :--- | :---: |
+| 0선 | DBManager | ✅ 성공 | 6개 | `financial_data.json` | - | 1.4초 |
+| 1선 | KoreaReporter | ✅ 성공 | 6개 | `2026-05-24_Google News Korea_미국 국채 금리 급등에 따른 긴장 고조_ 한국 경제에 미치는 고금리 연쇄 효과 분석.md`, `2026-05-19_Google News Korea_유가 및 금리 동반 압박 심화에 따른 월가 기술주 매도세 확산 분석.md`, `2026-05-23_조선일보 경제_비타민 전문 기업 경남제약, 주류 사업 진출로 포트폴리오 다각화 시도 배경 분석.md` 외 3건 | - | 45.2초 |
+| 2선 | GlobalReporter | ✅ 성공 | 2개 | `2026-05-23_Google News Global_5월 셋째 주 세계 경제 동향 브리핑_ 코스피 7,800선 돌파와 한미 증시의 동반 강세.md`, `2026-05-22_Google News Global_AI 인프라 투자가 세계 경제 성장의 핵심 동력으로 부상_ 2026년 글로벌 AI 투자 규모 1,516.7조원 전망.md` | - | 16.0초 |
+| 3선 | BitcoinReporter | ✅ 성공 | 6개 | `2026-05-23_CoinDesk_트럼프 대통령, 이란 평화 협정 발표에 힘입어 비트코인 상승세 지속 전망.md`, `2026-05-23_CoinDesk_비트코인, 주식과 채권 대비 저조한 성과 탈피 임박_ 인플레이션 장기화 국면에서 재도약 준비.md`, `2026-05-23_CoinTelegraph_암호화폐 지갑 해킹 공격의 주요 발생 지역 분석_ 프랑스발 위협 증가 경고.md` 외 3건 | - | 51.3초 |
+| 4선 | WikiManager | ⚠️ 경고 | 13개 | `Korea-Economy_draft.md`, `US-Fed_draft.md`, `Bitcoin_draft.md` 외 10건 | Ollama 분석 결과물이 없거나 너무 짧아 갱신을 생략합니다 (2026-05-23_CoinTelegraph_분석가들, 비트코인 $6만 레벨까지 급락 경고하며 2026년 최저점 재도달 가능성 제기.md) | 350.2초 |
 

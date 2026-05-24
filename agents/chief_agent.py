@@ -333,7 +333,7 @@ class ChiefAgent:
             btc_sign = "+" if btc_krw_change > 0 else ""
             
             fin_card = f"""📊 *[오늘의 실시간 금융/크립토 주요 지표]*
-• 🪙 *Bitcoin (Upbit)*: `{btc_krw:,.0f}원` ({btc_sign}{btc_krw_change:.2f}%)
+• 🪙 *Bitcoin (Upbit)*: `{btc_krw:,.0f}원` / `${btc_usd:,.2f}` ({btc_sign}{btc_krw_change:.2f}%)
 • ⚡ *김치 프리미엄 (Premium)*: `{kimp_sign}{kimchi_premium:.2f}%`
 • 💵 *원/달러 환율 (USD/KRW)*: `{exchange_rate:,.2f}원`
 • 🇰🇷 *한국 기준금리 (BOK Rate)*: `{bok_rate:.2f}%`
@@ -398,4 +398,3 @@ if __name__ == "__main__":
     print("\n" + "="*55)
     print("릴레이 실행 최종 브리핑 출력:")
     print("="*55)
-    print(brief)

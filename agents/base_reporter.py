@@ -328,13 +328,18 @@ tags: [{tags_str}]
                     tag.decompose()
                     
                 article_body = ""
-                article_tag = soup.find("article")
-                if article_tag:
-                    article_body = article_tag.get_text("\n")
+                
+                # Decrypt 등 특정 미디어의 코인 가격 리스크 피하기 위해, 구체적인 본문 클래스부터 우선 스캔
+                body_div = soup.find("div", class_=re.compile(r'(post-content|article_body|article-body|news-body|view-content|story-content|article-content|news_content|news-text)', re.I))
+                if body_div:
+                    article_body = body_div.get_text("\n")
                 else:
-                    body_div = soup.find("div", class_=re.compile(r'(article_body|article-body|news-body|view-content|story-content|article-content|news_content|news-text|post-content)', re.I))
-                    if body_div:
-                        article_body = body_div.get_text("\n")
+                    article_tag = soup.find("article")
+                    if article_tag:
+                        # article 내부의 코인 가격 위젯이나 사이드바가 있으면 제거하여 순수 본문 팩트 확보
+                        for side_widget in article_tag.find_all(class_=re.compile(r'(coin-prices|price-data|sidebar|widget|promo)', re.I)):
+                            side_widget.decompose()
+                        article_body = article_tag.get_text("\n")
                     else:
                         p_tags = soup.find_all("p")
                         if len(p_tags) > 2:

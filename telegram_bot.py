@@ -193,13 +193,13 @@ def parse_wiki_for_telegram(wiki_name: str) -> str:
         return f"❌ [[{wiki_name}]] 로딩 실패: {e}"
 
 def make_financial_card() -> str:
-    """실시간 금융 지표 캐시 파일을 텔레그램 마크다운 카드로 포맷팅"""
+    """실시간 금융 지표 캐시 파일을 텔레그램 마크다운 카드로 포맷팅 (BTC USD + 알트코인 포함)"""
     if not FINANCIAL_DATA_PATH.exists():
         return ""
     try:
         with open(FINANCIAL_DATA_PATH, "r", encoding="utf-8") as f:
             data = json.load(f)
-        
+
         btc_krw = data.get("btc_krw", 0)
         btc_krw_change = data.get("btc_krw_change", 0)
         btc_usd = data.get("btc_usd", 0)
@@ -207,16 +207,56 @@ def make_financial_card() -> str:
         bok_rate = data.get("bok_rate", 0)
         kimchi_premium = data.get("kimchi_premium", 0)
         updated_at = data.get("updated_at", "")
-        
+        altcoins: dict = data.get("altcoins", {})
+
         btc_change_sign = "+" if btc_krw_change > 0 else ""
         kimp_sign = "+" if kimchi_premium > 0 else ""
-        
-        card = f"""📊 *[오늘의 실시간 금융/크립토 주요 지표]*
-• 🪙 *Bitcoin (Upbit)*: `{btc_krw:,.0f}원` ({btc_change_sign}{btc_krw_change:.2f}%)
-• ⚡ *김치 프리미엄 (Premium)*: `{kimp_sign}{kimchi_premium:.2f}%`
-• 💵 *원/달러 환율 (USD/KRW)*: `{exchange_rate:,.2f}원`
-• 🇰🇷 *한국 기준금리 (BOK Rate)*: `{bok_rate:.2f}%`
+
+        # 알트코인 이모지 매핑
+        ALTCOIN_EMOJI = {
+            "ETH": "🔷", "XRP": "🔵", "SOL": "🟣",
+            "SAND": "🏖", "MANA": "🌐", "DOGE": "🐶", "WAVES": "🌊"
+        }
+
+        # 알트코인 라인 생성 (KRW + USD 둘 다 표기, 미지원 코인도 항상 표시)
+        alt_lines = ""
+        ALT_ORDER = ["ETH", "XRP", "SOL", "DOGE", "SAND", "MANA", "WAVES"]
+        for symbol in ALT_ORDER:
+            emoji = ALTCOIN_EMOJI.get(symbol, "🔹")
+            if symbol not in altcoins:
+                # Upbit 미지원 또는 수집 실패
+                alt_lines += f"• {emoji} *{symbol}*: `N/A`\n"
+                continue
+            info = altcoins[symbol]
+            krw_p = info.get("krw", 0)
+            usd_p = info.get("usd", 0)
+            chg = info.get("change", 0)
+            chg_sign = "+" if chg >= 0 else ""
+            # KRW 포맷: 가격대별 소수점 자동 조정
+            if krw_p < 1:
+                krw_str = f"{krw_p:.4f}원"
+            elif krw_p < 10:
+                krw_str = f"{krw_p:.2f}원"
+            else:
+                krw_str = f"{krw_p:,.0f}원"
+            # USD 포맷
+            if usd_p < 0.001:
+                usd_str = f"${usd_p:.6f}"
+            elif usd_p < 1:
+                usd_str = f"${usd_p:.4f}"
+            else:
+                usd_str = f"${usd_p:,.4f}"
+            alt_lines += f"• {emoji} *{symbol}*: `{krw_str}` / `{usd_str}` ({chg_sign}{chg:.2f}%)\n"
+
+        card = f"""📊 *[실시간 금융/크립토 주요 지표]*
+• 🪙 *Bitcoin (Upbit)*: `{btc_krw:,.0f}원` / `${btc_usd:,.2f}` ({btc_change_sign}{btc_krw_change:.2f}%)
+• ⚡ *김치 프리미엄*: `{kimp_sign}{kimchi_premium:.2f}%`
+• 💵 *원/달러 환율*: `{exchange_rate:,.2f}원`
+• 🇰🇷 *한국 기준금리*: `{bok_rate:.2f}%`
 • 🕒 *기준시*: `{updated_at}`
+━━━━━━━━━━━━━━━━━━━━━
+📈 *[알트코인 시세]*
+{alt_lines.rstrip()}
 ━━━━━━━━━━━━━━━━━━━━━
 """
         return card
@@ -511,25 +551,111 @@ async def button_callback_handler(update: Update, context: ContextTypes.DEFAULT_
 
 # --- 브리핑 알림(Push) 발송용 비동기 함수 ---
 
+def _read_latest_risk_score() -> str:
+    """
+    obsidian-vault/raw/strategy/ 에서 가장 최신 *_risk_assessment.md 파일을 탐색하여
+    리스크 점수 및 한줄 요약을 추출합니다. 실패 시 빈 문자열 반환.
+
+    실제 LLM 출력 포맷 기준:
+      - 점수: '### 📉 종합 리스크 등급: 8/10'
+      - 요약: '**[판단 근거 요약]**' 이후 첫 문단, fallback → '**[핵심 경고]**' 이후 첫 문장
+    """
+    try:
+        strategy_dir = ROOT_DIR / "obsidian-vault" / "raw" / "strategy"
+        if not strategy_dir.exists():
+            return ""
+        candidates = sorted(strategy_dir.glob("*_risk_assessment.md"), reverse=True)
+        if not candidates:
+            return ""
+        latest = candidates[0]
+        content = latest.read_text(encoding="utf-8")
+
+        import re
+
+        # ── 1. 리스크 점수 추출 ──────────────────────────────────────
+        # 포맷: "종합 리스크 등급: 8/10"  또는  "리스크 등급: 7/10"
+        score_match = re.search(
+            r"(?:종합\s*)?리스크\s*등급[:\s：]*(\d+)\s*/\s*10",
+            content, re.IGNORECASE
+        )
+        # fallback: "8등급" 단독 표현
+        if not score_match:
+            score_match = re.search(r"(\d+)\s*등급", content)
+        score_str = f"{score_match.group(1)}/10" if score_match else "N/A"
+
+        # ── 2. 한줄 요약 추출 ────────────────────────────────────────
+        one_line = ""
+        # 우선순위 1: **[판단 근거 요약]** 이후 첫 문단
+        summary_match = re.search(
+            r"\*\*\[판단\s*근거\s*요약\]\*\*\s*\n+(.*?)(?:\n\n|\n\*\*|\n#+|$)",
+            content, re.DOTALL
+        )
+        if summary_match:
+            raw = summary_match.group(1).strip().split("\n")[0]
+            one_line = re.sub(r"\*+", "", raw).strip()[:90]
+
+        # 우선순위 2: **[핵심 경고]** 이후 첫 문장
+        if not one_line:
+            warn_match = re.search(
+                r"\*\*\[핵심\s*경고\]\*\*\s*\n+(.*?)(?:\n\n|\n#|$)",
+                content, re.DOTALL
+            )
+            if warn_match:
+                raw = warn_match.group(1).strip().split("\n")[0]
+                one_line = re.sub(r"\*+", "", raw).strip()[:90]
+
+        # 우선순위 3: 헤더·테이블·코드 제외 첫 일반 텍스트 줄
+        if not one_line:
+            for line in content.split("\n"):
+                stripped = line.strip()
+                if stripped and not stripped.startswith("#") and not stripped.startswith("|") \
+                        and not stripped.startswith("```") and not stripped.startswith("**["):
+                    one_line = re.sub(r"\*+", "", stripped).strip()[:90]
+                    break
+
+        summary_part = f"\n   _{one_line}_" if one_line else ""
+        return f"🚨 *리스크 점수*: `{score_str}`{summary_part}"
+    except Exception as e:
+        print(f"[!] 리스크 점수 읽기 실패: {e}")
+        return ""
+
+
 async def send_briefing_notification():
     """정기 스케줄 뉴스 분석 완료 시 텔레그램 채널에 브리핑 요약을 푸시 발송하는 함수"""
     if not is_token_valid():
         print("[!] 텔레그램 알림 발송 생략 (유효한 TOKEN 및 CHAT_ID 미설정)")
         return
-        
+
     print("[*] 텔레그램 알림 브리핑 발송 준비 중...")
     app = Application.builder().token(BOT_TOKEN).build()
-    
-    # 3대 위키 문서의 최종 상태 기반 요약 전송 (종합 요약만 추출하여 깔끔하게 전송)
+
+    # 3대 위키 문서 요약 추출
     btc_report = escape_markdown_for_telegram(parse_wiki_for_telegram("Bitcoin"))
     fed_report = escape_markdown_for_telegram(parse_wiki_for_telegram("US-Fed"))
     kor_report = escape_markdown_for_telegram(parse_wiki_for_telegram("Korea-Economy"))
-    
+
+    # 실시간 금융 지표 카드 (BTC KRW/USD + 알트코인)
     fin_card = make_financial_card()
-    
+
+    # 5선 리스크 점수 (최신 세션 파일에서 추출)
+    risk_section = _read_latest_risk_score()
+
+    # AI 분석 면책 문구
+    ai_disclaimer = "⚠️ _아래 요약은 로컬 AI(Ollama)가 생성한 분석으로, 실제 수치와 다를 수 있습니다._"
+
     briefing_message = f"""🔔 *[로컬 LLM Wiki] 자동 정기 요약 브리핑*
 
-{fin_card}
+{fin_card}"""
+
+    # 5선 리스크 점수 섹션 (있을 때만 추가)
+    if risk_section:
+        briefing_message += f"""🎯 *[5선 전략 분석 — 리스크 진단]*
+{risk_section}
+━━━━━━━━━━━━━━━━━━━━━
+"""
+
+    briefing_message += f"""{ai_disclaimer}
+
 🪙 *비트코인 동향 요약:*
 {btc_report}
 
@@ -541,6 +667,7 @@ async def send_briefing_notification():
 
 💡 상세 분석 및 전체 지식 크로스링크는 옵시디언 앱(Vault)에서 확인하세요!
 """
+
     try:
         await app.bot.send_message(chat_id=CHAT_ID, text=briefing_message, parse_mode="Markdown")
         print("[+] 텔레그램 일일 브리핑 메시지 발송 완료!")
@@ -627,6 +754,24 @@ async def text_message_handler(update: Update, context: ContextTypes.DEFAULT_TYP
     # 1. 키워드 기반 위키 요약/제어 분기 매칭
     if any(kw in text for kw in ["업데이트", "가져와", "동기화"]):
         await update_command(update, context)
+        return
+    elif any(kw in text.lower() for kw in [
+        "시황", "코인", "크립토", "crypto", "현재가", "시세", "브리핑", "지표"
+    ]):
+        # 시황/코인/시세 관련 질문 → 실시간 금융 카드 + BTC 위키 + 알트코인 즉시 발송
+        await log_chat_message(sender="user", message_text=text, session_id=str(update.message.chat_id))
+        fin_card = make_financial_card()
+        btc_report = escape_markdown_for_telegram(parse_wiki_for_telegram("Bitcoin"))
+        risk_line = _read_latest_risk_score()
+        reply = (
+            f"📊 *[실시간 코인 시황 브리핑]*\n\n"
+            f"{fin_card}"
+            + (f"🎯 *[5선 리스크 진단]*\n{risk_line}\n━━━━━━━━━━━━━━━━━━━━━\n" if risk_line else "")
+            + f"🪙 *비트코인 동향 요약:*\n{btc_report}\n\n"
+            f"💡 세계경제·국내경제 분석은 /fed /korea 로 조회하세요."
+        )
+        msg = await update.message.reply_text(reply, parse_mode="Markdown")
+        await log_chat_message(sender="bot", message_text=msg.text or "", session_id=str(update.message.chat_id))
         return
     elif "비트코인" in text or "bitcoin" in text.lower():
         await bitcoin_command(update, context)
@@ -785,6 +930,106 @@ async def scheduled_update_loop():
         # 12시간 대기 ➡️ 1시간 (3600초) 대폭 축소! AI들 끊임없이 가동!
         await asyncio.sleep(3600)
 
+# --- [R12 신설] 공인 IP 변경 감지 및 Upbit API 재등록 알림 ---
+
+IP_CONFIG_PATH = ROOT_DIR / "_company" / "ip_config.json"
+IP_CHECK_URLS = [
+    "https://api.ipify.org",
+    "https://api4.my-ip.io/ip",
+    "https://checkip.amazonaws.com",
+]
+
+def _get_current_public_ip() -> str:
+    """공인 IP를 외부 API 3종 중 하나로 조회합니다. 실패 시 빈 문자열 반환."""
+    headers = {"User-Agent": "Mozilla/5.0"}
+    for url in IP_CHECK_URLS:
+        try:
+            res = requests.get(url, headers=headers, timeout=6)
+            if res.status_code == 200:
+                ip = res.text.strip()
+                if ip and len(ip) <= 45:   # IPv4/IPv6 길이 범위
+                    return ip
+        except Exception:
+            continue
+    return ""
+
+def _get_registered_ip() -> str:
+    """ip_config.json 에서 현재 등록된 IP를 읽습니다."""
+    try:
+        if IP_CONFIG_PATH.exists():
+            data = json.loads(IP_CONFIG_PATH.read_text(encoding="utf-8"))
+            return data.get("registered_ip", "")
+    except Exception:
+        pass
+    return ""
+
+def _save_registered_ip(new_ip: str):
+    """ip_config.json 의 registered_ip 를 새 IP로 업데이트합니다."""
+    try:
+        data = {}
+        if IP_CONFIG_PATH.exists():
+            data = json.loads(IP_CONFIG_PATH.read_text(encoding="utf-8"))
+        data["registered_ip"] = new_ip
+        data["registered_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        IP_CONFIG_PATH.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    except Exception as e:
+        print(f"[!] ip_config.json 저장 실패: {e}")
+
+async def ip_monitor_loop():
+    """
+    30분 주기로 공인 IP를 확인하여, ip_config.json 의 등록 IP와 달라졌을 경우
+    텔레그램으로 즉시 경보를 발송합니다. (Upbit API 재등록 안내 포함)
+    """
+    # 봇 기동 후 2분 대기 (다른 루프 안정화 우선)
+    await asyncio.sleep(120)
+    print("[*] [IP 모니터] 공인 IP 변경 감지 시스템 가동.")
+
+    while True:
+        try:
+            current_ip = await asyncio.to_thread(_get_current_public_ip)
+            registered_ip = _get_registered_ip()
+
+            if current_ip and registered_ip and current_ip != registered_ip:
+                print(f"[!] [IP 모니터] 공인 IP 변경 감지: {registered_ip} → {current_ip}")
+
+                alert_msg = (
+                    f"🌐 *[공인 IP 변경 감지 경보]*\n\n"
+                    f"컴퓨터의 공인 IP가 바뀌었습니다!\n"
+                    f"Upbit API가 차단될 수 있으니 즉시 재등록해 주세요.\n\n"
+                    f"• 이전 IP: `{registered_ip}`\n"
+                    f"• *새 IP: `{current_ip}`* ← 이걸 등록하세요\n\n"
+                    f"📋 *재등록 순서:*\n"
+                    f"1. Upbit 로그인 → My → Open API 관리\n"
+                    f"2. 기존 Key 삭제 후 재발급 (또는 변경 버튼)\n"
+                    f"3. IP 주소 칸에 `{current_ip}` 입력\n"
+                    f"4. 자산조회 체크 → 발급\n\n"
+                    f"_등록 완료 후 봇에 '업데이트' 또는 /update 를 보내주세요._"
+                )
+
+                try:
+                    app_notif = Application.builder().token(BOT_TOKEN).build()
+                    await app_notif.bot.send_message(
+                        chat_id=CHAT_ID,
+                        text=alert_msg,
+                        parse_mode="Markdown"
+                    )
+                    await log_chat_message(sender="bot", message_text=alert_msg, session_id=str(CHAT_ID))
+                    # ip_config.json 에 새 IP 기록 (다음 루프에서 중복 알림 방지)
+                    await asyncio.to_thread(_save_registered_ip, current_ip)
+                    print(f"[+] [IP 모니터] IP 변경 경보 발송 완료. 새 IP {current_ip} 저장.")
+                except Exception as send_err:
+                    print(f"[!] [IP 모니터] 경보 발송 실패: {send_err}")
+
+            elif current_ip:
+                print(f"[*] [IP 모니터] 공인 IP 정상: {current_ip}")
+
+        except Exception as e:
+            print(f"[!] [IP 모니터] 루프 오류: {e}")
+
+        # 30분마다 체크
+        await asyncio.sleep(1800)
+
+
 # --- [R11 신설] 1시간 주기 능동형 프로액티브 모니터링 루프 ---
 
 async def proactive_monitoring_loop():
@@ -907,37 +1152,36 @@ def main():
         
     print("[*] 텔레그램 대화형 에이전트 봇 구동 시작 (Polling 모드)...")
     
-    # 백그라운드 12시간 자동 스케줄러 루틴 등록
     async def post_init(application: Application):
         asyncio.create_task(scheduled_update_loop())
-        asyncio.create_task(proactive_monitoring_loop())  # [R11 능동형 모니터 등록]
-        print("[+] 12시간 백그라운드 자동 스케줄러 및 능동 모니터링 태스크 등록 완료.")
-        
+        asyncio.create_task(proactive_monitoring_loop())  # [R11]
+        asyncio.create_task(ip_monitor_loop())            # [R12 IP 변경 감지]
+        print("[+] 백그라운드 스케줄러 / 능동 모니터링 / IP 변경 감지 등록 완료.")
+        try:
+            await application.bot.send_message(
+                chat_id=CHAT_ID,
+                text="🤖 *텔레그램 봇이 성공적으로 재시작되었습니다!*",
+                parse_mode="Markdown"
+            )
+            print("[+] 텔레그램 재시작 알림 메시지 발송 완료.")
+        except Exception as e:
+            print(f"[!] 텔레그램 재시작 알림 메시지 발송 실패: {e}")
+
     app = Application.builder().token(BOT_TOKEN).post_init(post_init).build()
-    
-    # 0. 콜백 쿼리 핸들러 등록 (R4 승인 게이트 필수 등록)
     app.add_handler(CallbackQueryHandler(button_callback_handler))
-    
-    # 1. 텔레그램 규격에 맞는 영어 CommandHandler 등록
-    app.add_handler(CommandHandler("start", start_command))
-    app.add_handler(CommandHandler("help", start_command))
-    app.add_handler(CommandHandler("update", update_command))
+    app.add_handler(CommandHandler("start",   start_command))
+    app.add_handler(CommandHandler("help",    start_command))
+    app.add_handler(CommandHandler("update",  update_command))
     app.add_handler(CommandHandler("bitcoin", bitcoin_command))
-    app.add_handler(CommandHandler("fed", fed_command))
-    app.add_handler(CommandHandler("korea", korea_command))
-    app.add_handler(CommandHandler("log", log_command))
-    
-    # 2. 한글 메시지 수신 및 지능형 키워드 응답을 위한 MessageHandler 등록 (가장 자연스러운 인터랙션 확보)
+    app.add_handler(CommandHandler("fed",     fed_command))
+    app.add_handler(CommandHandler("korea",   korea_command))
+    app.add_handler(CommandHandler("log",     log_command))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text_message_handler))
-    
-    print("[+] 봇이 정상 준비되었습니다. 텔레그램에서 명령어를 전송하거나 텍스트를 보내 대화하세요.")
+    print("[+] 봇 준비 완료. 텔레그램에서 명령어를 보내 대화하세요.")
     app.run_polling()
 
 if __name__ == "__main__":
-    # 0. 텔레그램 SQLite DB 및 로깅 사전 생성 (치명적 OperationalError 해결)
     init_chat_db()
-    
-    # 만약 --send-briefing 인자가 주어지면 대화형 폴링이 아닌 단순 push 알림만 1회 쏘고 종료
     if len(sys.argv) > 1 and sys.argv[1] == "--send-briefing":
         asyncio.run(send_briefing_notification())
     else:

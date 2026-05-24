@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "f8b86dde60bace87",
+        "id": "e3cafdf83afaac3b",
         "type": "tabs",
         "children": [
           {
-            "id": "5c4da5d7bf4e6781",
+            "id": "ec5c20de475a66d0",
             "type": "leaf",
             "state": {
-              "type": "empty",
+              "type": "graph",
               "state": {},
-              "icon": "lucide-file",
-              "title": "새 탭"
+              "icon": "lucide-git-fork",
+              "title": "그래프 뷰"
             }
           }
         ]
@@ -176,19 +176,34 @@
       "bases:새 베이스 생성하기": false
     }
   },
-  "active": "5c4da5d7bf4e6781",
+  "active": "ec5c20de475a66d0",
   "lastOpenFiles": [
-    "raw/strategy/2026-05-24T04-16_strategy_column.md",
+    "raw/news/2026-05-22_Decrypt_Microsoft's Free AI Just Beat OpenAI and Google at Browsing the Web.md",
+    "raw/news/2026-05-24_동아일보 경제_삼성전자 임단협 잠정 합의안 찬반 투표율 82% 돌파, 국내 기업 내부 구조적 리스크와 [[Korea-Economy]]의 미래 전망 주목.md",
+    "raw/news/2026-05-24_동아일보 경제_중동발 원유 수입 구조 변화와 높은 수입물가_ 국내 산업 및 거시경제 대응 전략 필요.md",
+    "raw/news/2026-05-24_Google News Korea_주택담보대출 고정금리, 5% 하단 돌파와 '이자 공포' 심화_ 국내 부동산 시장의 자금 흐름 분석.md",
+    "raw/news/2026-05-24_Google News Korea_주택담보대출 고정금리, 5% 하단 돌파하며 '영끌족' 이자 부담 공포 심화.md",
+    "raw/news/2026-05-24_Google News Korea_미국 국채 금리 급등에 따른 금융 긴장 고조와 한국 경제의 고금리 연쇄 효과 분석.md",
+    "raw/news/2026-05-24_Google News Korea_미국 국채 금리 급등에 따른 금융 긴장 확산과 한국 경제의 고금리 연쇄 효과 분석.md",
     "raw/strategy/2026-05-24T04-16_risk_assessment.md",
-    "raw/strategy/2026-05-24T04-16_onchain_signal.md",
-    "raw/strategy/2026-05-24T04-16_macro_signal.md",
+    "raw/2026-05-23_Decrypt_Bitcoin Dives Below $75K for First Time in a Month as Crypto Liquidations Near $.md",
+    "raw/2026-05-23_Decrypt_Firefox's Big Redesign Gives You a Button to Kill All the AI.md",
+    "raw/2026-05-23_CoinTelegraph_분석가들, 비트코인 $6만 레벨까지 급락 경고하며 2026년 최저점 재도달 가능성 제기.md",
+    "raw/2026-05-23_CoinTelegraph_암호화폐 지갑 해킹 공격의 주요 발생 지역 분석_ 프랑스발 위협 증가 경고.md",
+    "raw/2026-05-23_CoinDesk_비트코인, 주식과 채권 대비 저조한 성과 탈피 임박_ 인플레이션 장기화 국면에서 재도약 준비.md",
+    "raw/2026-05-23_CoinDesk_트럼프 대통령, 이란 평화 협정 발표에 힘입어 비트코인 상승세 지속 전망.md",
+    "raw/2026-05-22_Google News Global_AI 인프라 투자가 세계 경제 성장의 핵심 동력으로 부상_ 2026년 글로벌 AI 투자 규모 1,516.7조원 전망.md",
+    "raw/2026-05-23_Google News Global_5월 셋째 주 세계 경제 동향 브리핑_ 코스피 7,800선 돌파와 한미 증시의 동반 강세.md",
+    "raw/2026-05-24_동아일보 경제_고물가와 소비 패턴 변화가 야기하는 국내 소상공인 시장의 구조적 위축_ 주점 업황 분석.md",
+    "raw/2026-05-24_동아일보 경제_삼성전자 임단협 잠정 합의안 투표율 82% 돌파_ 국내 기업 내부 구조적 리스크와 경제적 파급 효과 분석.md",
+    "raw/2026-05-24_조선일보 경제_정치적 논란과 지역 광고 예산 배분 문제 제기_ 금융 시장의 거시적 영향 분석.md",
+    "raw/2026-05-23_조선일보 경제_비타민 전문 기업 경남제약, 주류 사업 진출로 포트폴리오 다각화 시도 배경 분석.md",
+    "raw/2026-05-19_Google News Korea_유가 및 금리 동반 압박 심화에 따른 월가 기술주 매도세 확산 분석.md",
+    "raw/2026-05-24_Google News Korea_미국 국채 금리 급등에 따른 긴장 고조_ 한국 경제에 미치는 고금리 연쇄 효과 분석.md",
     "Dashboard.md",
-    "wiki/US-Fed.md",
-    "wiki/SCHEMA.md",
-    "wiki/Korea-Economy.md",
-    "wiki/index.md",
-    "wiki/Bitcoin.md",
-    "raw/development/cross_linker.py",
-    "raw/development/Development_Hub.md"
+    "Kalshi.md",
+    "raw/strategy/2026-05-24T04-16_strategy_column.md",
+    "raw/strategy/2026-05-24T04-16_onchain_signal.md",
+    "raw/development/cross_linker.py"
   ]
 }

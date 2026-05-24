@@ -70,32 +70,42 @@ class DBManager:
         if btc_usd > 0.0 and exchange_rate > 0.0 and btc_krw > 0.0:
             converted_krw = btc_usd * exchange_rate
             kimchi_premium = ((btc_krw - converted_krw) / converted_krw) * 100
-            
+
+        # 5. 알트코인 7종 수집 (Upbit KRW + USD 환산)
+        altcoins = {}
+        try:
+            altcoins = self._fetch_upbit_altcoins(exchange_rate)
+        except Exception as e:
+            err = f"알트코인 수집 실패: {e}"
+            print(f"    [!] {err}")
+            errors.append(err)
+
         financial_data = {
             "btc_krw": btc_krw,
             "btc_krw_change": round(btc_krw_change, 2),
-            "btc_usd": btc_usd,
+            "btc_usd": round(btc_usd, 2),
             "exchange_rate": round(exchange_rate, 2),
             "bok_rate": round(bok_rate, 2),
             "kimchi_premium": round(kimchi_premium, 2),
+            "altcoins": altcoins,
             "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
-        
-        # 5. 원자적 안전 캐시 영속화 (경쟁 조건 방지)
+
+        # 6. 원자적 안전 캐시 영속화 (경쟁 조건 방지)
         try:
             json_str = json.dumps(financial_data, ensure_ascii=False, indent=2)
             write_file_safely(FINANCIAL_DATA_PATH, json_str)
-            print(f"\n[+] 금융 데이터 원자적 캐싱 성공 ({FINANCIAL_DATA_PATH.name}) -> {financial_data}")
+            print(f"\n[+] 금융 데이터 원자적 캐싱 성공 ({FINANCIAL_DATA_PATH.name})")
         except Exception as e:
             err = f"금융 데이터 JSON 안전 캐시 쓰기 오류: {e}"
             print(f"    [!] {err}")
             errors.append(err)
-            
+
         elapsed = time.time() - start_time
         return AgentResult(
             agent_name=self.agent_name,
             success=len(errors) < 3,  # 완전 붕괴(치명적 API 에러 3개 이상)가 아니면 릴레이 진행 허용
-            collected_count=6,
+            collected_count=6 + len(altcoins),
             files_created=[str(FINANCIAL_DATA_PATH)],
             errors=errors,
             elapsed_seconds=elapsed,
@@ -155,6 +165,39 @@ class DBManager:
         except Exception:
             pass
         return default_val
+
+    def _fetch_upbit_altcoins(self, exchange_rate: float) -> dict:
+        """
+        업비트 API로 알트코인 7종 (ETH, XRP, SOL, SAND, MANA, DOGE, WAVES)
+        KRW 시세 및 변동률을 일괄 수집하고, USD 환산 가격도 함께 반환합니다.
+        """
+        ALTCOIN_LIST = ["ETH", "XRP", "SOL", "SAND", "MANA", "DOGE", "WAVES"]
+        markets = ",".join([f"KRW-{c}" for c in ALTCOIN_LIST])
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+        result = {}
+        try:
+            res = requests.get(
+                f"https://api.upbit.com/v1/ticker?markets={markets}",
+                headers=headers, timeout=10
+            )
+            if res.status_code == 200:
+                for item in res.json():
+                    market = item.get("market", "")         # e.g. "KRW-ETH"
+                    symbol = market.replace("KRW-", "")
+                    krw_price = float(item.get("trade_price", 0))
+                    change_rate = round(float(item.get("signed_change_rate", 0)) * 100, 2)
+                    usd_price = round(krw_price / exchange_rate, 4) if exchange_rate > 0 else 0.0
+                    result[symbol] = {
+                        "krw": krw_price,
+                        "usd": usd_price,
+                        "change": change_rate
+                    }
+                    print(f"    [+] Upbit 알트 {symbol}: {krw_price:,.1f}원 / ${usd_price:,.4f} ({change_rate:+.2f}%)")
+        except Exception as e:
+            print(f"    [!] 알트코인 Upbit 요청 실패: {e}")
+        return result
 
     def _fetch_fallback_exchange_rate(self) -> float:
         """환율 조회 이중 Fallback API 작동"""
