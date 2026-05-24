@@ -189,3 +189,14 @@
 | 3선 | BitcoinReporter | ✅ 성공 | 1개 | `2026-05-23_CoinTelegraph_암호화폐 '렌치 공격'의 70%가 프랑스에서 발생_ 중앙화 데이터 수집의 위험성 경고.md` | - | 10.3초 |
 | 4선 | WikiManager | ⚠️ 경고 | 25개 | `Korea-Economy_draft.md`, `Korea-Economy_draft.md`, `US-Fed_draft.md` 외 22건 | Ollama 분석 결과물이 없거나 너무 짧아 갱신을 생략합니다 (2026-05-23_CoinTelegraph_오늘의 암호화폐 시장 동향 분석_ 비트코인 가격 및 주요 산업별 이슈 점검.md) | 542.5초 |
 
+
+## 📊 [2026-05-24 10:18:35] 릴레이 실행 결과표 | 총 5단계 완료 (성공: 4/5, 총 소요: 660.4초)
+
+| 단계 | 에이전트명 | 상태 | 처리/수집 건수 | 생성 및 갱신 파일 | 에러 및 경고 내용 | 소요 시간 |
+| :---: | :--- | :---: | :---: | :--- | :--- | :---: |
+| 0선 | DBManager | ✅ 성공 | 6개 | `financial_data.json` | - | 1.2초 |
+| 1선 | KoreaReporter | ✅ 성공 | 1개 | `2026-05-24_조선일보 경제_하남갑 보궐선거 여론조사 결과 분석_ 정치적 변동성이 국내 경제 심리에 미치는 영향.md` | - | 12.6초 |
+| 2선 | GlobalReporter | ✅ 성공 | 0개 | - | - | 3.1초 |
+| 3선 | BitcoinReporter | ✅ 성공 | 0개 | - | - | 4.5초 |
+| 4선 | WikiManager | ⚠️ 경고 | 26개 | `Korea-Economy_draft.md`, `Korea-Economy_draft.md`, `US-Fed_draft.md` 외 23건 | Ollama 분석 결과물이 없거나 너무 짧아 갱신을 생략합니다 (2026-05-23_CoinTelegraph_바이낸스, 이란 연계 거래 의혹 부인_ WSJ 보도에 대한 공식 입장 표명.md) | 581.3초 |
+

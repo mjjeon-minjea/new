@@ -21,6 +21,7 @@ ROOT_DIR = Path(__file__).parent.parent.parent.resolve()
 vault_path_str = os.getenv("OBSIDIAN_VAULT_PATH", "obsidian-vault")
 VAULT_PATH = ROOT_DIR / vault_path_str
 RAW_DIR = VAULT_PATH / "raw"
+NEWS_DIR = RAW_DIR / "news"
 WIKI_DIR = VAULT_PATH / "wiki"
 
 # 가상 기업 OS 격리 디렉토리 경로 추가 (R4 최종 설계 반영)
@@ -33,6 +34,7 @@ TELEGRAM_DB_PATH = ROOT_DIR / "_company" / "telegram_chat.db"
 
 # 디렉토리 실재 보장
 RAW_DIR.mkdir(parents=True, exist_ok=True)
+NEWS_DIR.mkdir(parents=True, exist_ok=True)
 WIKI_DIR.mkdir(parents=True, exist_ok=True)
 APPROVALS_PENDING_DIR.mkdir(parents=True, exist_ok=True)
 APPROVALS_APPROVED_DIR.mkdir(parents=True, exist_ok=True)

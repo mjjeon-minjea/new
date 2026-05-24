@@ -1,6 +1,6 @@
 import re
 from pathlib import Path
-from agents.shared.config import RAW_DIR
+from agents.shared.config import NEWS_DIR
 
 def write_file_safely(file_path: Path, content: str):
     """
@@ -39,12 +39,12 @@ def write_file_safely(file_path: Path, content: str):
 def get_existing_urls() -> set:
     """이미 Ingestion 완료되어 raw/ 폴더 아래 저장된 기사들의 URL 목록을 추출해 중복 수집을 원천 방지"""
     existing_urls = set()
-    if not RAW_DIR.exists():
+    if not NEWS_DIR.exists():
         return existing_urls
         
     url_pattern = re.compile(r'^url:\s*["\']?(.*?)["\']?\s*$', re.MULTILINE)
     
-    for file in RAW_DIR.glob("*.md"):
+    for file in NEWS_DIR.glob("*.md"):
         try:
             with open(file, "r", encoding="utf-8") as f:
                 content = f.read()

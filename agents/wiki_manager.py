@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any, List
 
-from agents.shared.config import WIKI_DIR, RAW_DIR, OLLAMA_MODEL
+from agents.shared.config import WIKI_DIR, RAW_DIR, NEWS_DIR, OLLAMA_MODEL
 from agents.shared.protocols import AgentResult
 from agents.shared.ollama_client import check_ollama_connection, call_ollama
 from agents.shared.file_utils import write_file_safely
@@ -49,12 +49,12 @@ class WikiManager:
         processed_news = self._get_processed_files()
         print(f"[*] 기존 완료된 기사 수: {len(processed_news)}개")
         
-        if not RAW_DIR.exists():
-            err_msg = f"raw 기사 보관 디렉토리가 존재하지 않습니다 ({RAW_DIR})"
+        if not NEWS_DIR.exists():
+            err_msg = f"raw 기사 보관 디렉토리가 존재하지 않습니다 ({NEWS_DIR})"
             print(f"    [!] {err_msg}")
             return AgentResult(agent_name=self.agent_name, success=False, errors=[err_msg])
             
-        all_raw_files = sorted(list(RAW_DIR.glob("*.md")))
+        all_raw_files = sorted(list(NEWS_DIR.glob("*.md")))
         unprocessed = [f for f in all_raw_files if f.name not in processed_news]
         
         print(f"[*] 수집된 전체 기사: {len(all_raw_files)}개 | 신규 미처리 기사: {len(unprocessed)}개")
@@ -263,7 +263,7 @@ sources_count: {sources_count}
         if not log_file.exists():
             return processed
             
-        file_pattern = re.compile(r'\[\[raw/(.+?\.md)\]\]')
+        file_pattern = re.compile(r'\[\[raw/(?:news/)?(.+?\.md)\]\]')
         try:
             with open(log_file, "r", encoding="utf-8") as f:
                 for line in f:
@@ -306,7 +306,7 @@ sources_count: {sources_count}
         
         # 1. log.md에 append-only로 기입
         log_file = WIKI_DIR / "log.md"
-        log_entry = f"## [{now_str}] ingest | [[raw/{raw_filename}]] 수집 및 [[{wiki_name}]] 위키 페이지 갱신\n"
+        log_entry = f"## [{now_str}] ingest | [[raw/news/{raw_filename}]] 수집 및 [[{wiki_name}]] 위키 페이지 갱신\n"
         try:
             with open(log_file, "a", encoding="utf-8") as f:
                 f.write(log_entry)

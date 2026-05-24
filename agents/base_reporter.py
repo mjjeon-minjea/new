@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import List, Dict, Any
 
 from agents.shared.config import (
-    DEEPSEARCH_API_KEY, DEEPSEARCH_API_URL, RAW_DIR, 
+    DEEPSEARCH_API_KEY, DEEPSEARCH_API_URL, NEWS_DIR, 
     OLLAMA_MODEL, TELEGRAM_BOT_TOKEN
 )
 from agents.shared.protocols import AgentResult
@@ -134,7 +134,7 @@ class BaseReporter:
                 
             date_only = pub_date.split(" ")[0]
             filename = f"{date_only}_{clean_source}_{clean_title}.md"
-            file_path = RAW_DIR / filename
+            file_path = NEWS_DIR / filename
             
             escaped_title = translated_title.replace('\\', '\\\\').replace('"', '\\"')
             escaped_feed_name = feed_name.replace('\\', '\\\\').replace('"', '\\"')
