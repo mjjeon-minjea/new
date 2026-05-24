@@ -1,9 +1,9 @@
 {
-  "btc_krw": 113341000.0,
-  "btc_krw_change": -0.01,
-  "btc_usd": 75811.9,
-  "exchange_rate": 1517.04,
+  "btc_krw": 115033000.0,
+  "btc_krw_change": 0.14,
+  "btc_usd": 76792.0,
+  "exchange_rate": 1516.19,
   "bok_rate": 3.5,
-  "kimchi_premium": -1.45,
-  "updated_at": "2026-05-24 04:05:16"
+  "kimchi_premium": -1.2,
+  "updated_at": "2026-05-24 10:11:54"
 }

@@ -4,6 +4,7 @@ from typing import Dict, Any, Optional
 
 from agents.shared.protocols import AgentResult
 from agents.shared.ollama_client import call_ollama
+from agents.shared.config import RAW_DIR
 
 class MacroSignalAnalyst:
     """5선 글로벌 거시 신호 분석가 에이전트"""
@@ -49,6 +50,13 @@ class MacroSignalAnalyst:
             file_path = session_dir / "macro_signal.md"
             file_path.write_text(signal_content, encoding="utf-8")
             files_created.append(str(file_path))
+            
+            # Obsidian Vault raw/strategy/ 동시 저장 추가
+            strategy_dir = RAW_DIR / "strategy"
+            strategy_dir.mkdir(parents=True, exist_ok=True)
+            obs_path = strategy_dir / f"{session_dir.name}_macro_signal.md"
+            obs_path.write_text(signal_content, encoding="utf-8")
+            files_created.append(str(obs_path))
             
         except Exception as e:
             err_msg = f"[{self.agent_name}] 거시 신호 분석 실패: {e}"

@@ -1,3 +1,5 @@
+← [[Development_Hub|개발 마스터 대시보드]]
+
 # Connect-AI v4.0 통합 구현 계획서 (R4)
 
 본 계획서는 사용자의 **"Connect-AI v4.0 통합 구현 계획서 (R3) 검토 R0"** 보고서에서 도출된 중간 수준의 구현 갭(설명 중심 명세에 대한 실제 코드 결여) 및 경미한 설계 정합성 지적(RAG 모듈 분리, 중복 래핑 제거)을 완전히 반영하여 보완한 최종 통합 구현 계획서 v4.0 (R4)입니다.
@@ -348,3 +350,6 @@ def run_relay(self):
 > [!IMPORTANT]
 > - 본 **v4.0 통합 구현 계획서 (R4)**는 R3 검토에서 지적된 3가지 중간 수준의 구현 갭(wiki_manager.py 내 RAG 주입, prompts.py 상수 탈피 및 prompt.md 동적 로드, chief_agent.py 내 sessions 타임스탬프 폴더 생성 및 JSON/MD 기록 자동화 로직)과 2가지 경미 조치 사항(agents/shared/rag_utils.py 신설로 RAG 로직의 설계 정합성 보강 및 decisions_path 이중 래핑 소거)을 **실제 Python 코드로 완벽하게 실체화**하여 보완한 무결점 최종 명세서입니다.
 > - 사용자님께서 검토 후 **"승인"**, **"진행"** 또는 **"시작"** 등 명시적인 실행 의사를 채팅으로 전송해 주시면, 즉각 `_company/` 최상위 구조 개설 및 텔레그램 `approval_gate` 연동 개발에 들어가도록 하겠습니다.
+
+## 🔗 연관 개발 문서 (Cross References)
+- [[2026-05-23_walkthrough_Connect-AI_v4.0_통합_구현_완수보고서_R0]]

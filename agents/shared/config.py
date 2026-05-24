@@ -15,7 +15,7 @@ if sys.platform.startswith('win'):
 load_dotenv()
 
 # 3. 경로 정의 및 디렉토리 자동 생성
-ROOT_DIR = Path(os.getcwd()).resolve()
+ROOT_DIR = Path(__file__).parent.parent.parent.resolve()
 
 # Obsidian Vault 관련 경로 설정
 vault_path_str = os.getenv("OBSIDIAN_VAULT_PATH", "obsidian-vault")

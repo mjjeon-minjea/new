@@ -1,0 +1,194 @@
+{
+  "main": {
+    "id": "884444a2a1334121",
+    "type": "split",
+    "children": [
+      {
+        "id": "f8b86dde60bace87",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5c4da5d7bf4e6781",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "새 탭"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "094862447dd8e316",
+    "type": "split",
+    "children": [
+      {
+        "id": "ab075e4c3c9d427f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7b2d01b26a0fa827",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "파일 탐색기"
+            }
+          },
+          {
+            "id": "3a180c8e31d3141f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "[\"category\"]",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "검색"
+            }
+          },
+          {
+            "id": "5162f1d03df4c971",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "북마크"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "4bec7e1f0d6456d3",
+    "type": "split",
+    "children": [
+      {
+        "id": "3e03414e5d29f709",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e84541abe1c9865f",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "백링크"
+            }
+          },
+          {
+            "id": "960667d5cf2cf201",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": false
+              },
+              "icon": "links-going-out",
+              "title": "나가는 링크"
+            }
+          },
+          {
+            "id": "2eef68eaefb7e611",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "태그"
+            }
+          },
+          {
+            "id": "f688c302f9d0642b",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "모든 속성"
+            }
+          },
+          {
+            "id": "166b15b48eeddfc4",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "개요"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:빠른 전환기 열기": false,
+      "graph:그래프 뷰 열기": false,
+      "canvas:새 캔버스 만들기": false,
+      "daily-notes:오늘의 일일 노트 열기": false,
+      "templates:템플릿 삽입": false,
+      "command-palette:명령어 팔레트 열기": false,
+      "bases:새 베이스 생성하기": false
+    }
+  },
+  "active": "5c4da5d7bf4e6781",
+  "lastOpenFiles": [
+    "raw/strategy/2026-05-24T04-16_strategy_column.md",
+    "raw/strategy/2026-05-24T04-16_risk_assessment.md",
+    "raw/strategy/2026-05-24T04-16_onchain_signal.md",
+    "raw/strategy/2026-05-24T04-16_macro_signal.md",
+    "Dashboard.md",
+    "wiki/US-Fed.md",
+    "wiki/SCHEMA.md",
+    "wiki/Korea-Economy.md",
+    "wiki/index.md",
+    "wiki/Bitcoin.md",
+    "raw/development/cross_linker.py",
+    "raw/development/Development_Hub.md"
+  ]
+}

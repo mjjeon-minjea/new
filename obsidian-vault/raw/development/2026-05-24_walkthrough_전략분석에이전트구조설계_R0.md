@@ -1,3 +1,5 @@
+← [[Development_Hub|개발 마스터 대시보드]]
+
 # 전략분석 에이전트 구조 설계 및 파이프라인 통합 완수보고서
 
 본 문서는 Connect-AI Financial OS에 신규 5선 전략분석 에이전트 군(`chief_strategy_analyst`, `macro_signal_analyst`, `onchain_signal_analyst`, `risk_assessor`)의 물리적/논리적 결합 작업을 모두 완수한 후, 실시간 unbuffered 통합 테스트 구동을 통해 동작 타당성을 실증하고 검수한 완수보고서입니다.

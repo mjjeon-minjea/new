@@ -4,6 +4,7 @@ from typing import List, Dict, Any, Optional
 
 from agents.shared.protocols import AgentResult
 from agents.shared.ollama_client import call_ollama
+from agents.shared.config import RAW_DIR
 
 class ChiefStrategyAnalyst:
     """5선 수석 전략 분석 및 종합 투자 전략서 기안 총괄 에이전트"""
@@ -75,6 +76,13 @@ class ChiefStrategyAnalyst:
             file_path = session_dir / "strategy_column.md"
             file_path.write_text(strategy_column, encoding="utf-8")
             files_created.append(str(file_path))
+            
+            # Obsidian Vault raw/strategy/ 동시 저장 추가
+            strategy_dir = RAW_DIR / "strategy"
+            strategy_dir.mkdir(parents=True, exist_ok=True)
+            obs_path = strategy_dir / f"{session_dir.name}_strategy_column.md"
+            obs_path.write_text(strategy_column, encoding="utf-8")
+            files_created.append(str(obs_path))
             
         except Exception as e:
             err_msg = f"[{self.agent_name}] 최종 종합 투자 전략 도출 실패: {e}"

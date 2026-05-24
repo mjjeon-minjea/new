@@ -1,3 +1,5 @@
+← [[Development_Hub|개발 마스터 대시보드]]
+
 # AI 멀티 에이전트 연합 토론실 (Joint Newsroom Multi-Agent Debate) 도입 계획서 (R9)
 
 단순히 뉴스 기사를 기계적으로 1차원 요약하는 기존 방식에서 완전히 진화하여, 3대 전문 리포터 에이전트(국내경제, 글로벌매크로, 가상자산)들이 각자의 영역에서 수집한 1차 초안을 바탕으로 **서로 교차 지적(Peer Review / Critique)하고 토론하며, 이를 자율적으로 반영해 보고서의 깊이와 교차 결합력을 최상으로 끌어올리는 집단지성 멀티 에이전트 토론실(Joint Newsroom Multi-Agent Debate & Consensus System)**의 구현 계획서입니다.

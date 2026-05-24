@@ -4,6 +4,7 @@ from typing import Dict, Any, Optional
 
 from agents.shared.protocols import AgentResult
 from agents.shared.ollama_client import call_ollama
+from agents.shared.config import RAW_DIR
 
 class RiskAssessor:
     """5선 금융시장 종합 변동성 및 크립토 리스크 계량 채점 평가 에이전트"""
@@ -55,6 +56,13 @@ class RiskAssessor:
             file_path = session_dir / "risk_assessment.md"
             file_path.write_text(assessment_content, encoding="utf-8")
             files_created.append(str(file_path))
+            
+            # Obsidian Vault raw/strategy/ 동시 저장 추가
+            strategy_dir = RAW_DIR / "strategy"
+            strategy_dir.mkdir(parents=True, exist_ok=True)
+            obs_path = strategy_dir / f"{session_dir.name}_risk_assessment.md"
+            obs_path.write_text(assessment_content, encoding="utf-8")
+            files_created.append(str(obs_path))
             
         except Exception as e:
             err_msg = f"[{self.agent_name}] 리스크 계량 채점 실패: {e}"

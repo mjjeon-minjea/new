@@ -4,6 +4,7 @@ from typing import Dict, Any, Optional
 
 from agents.shared.protocols import AgentResult
 from agents.shared.ollama_client import call_ollama
+from agents.shared.config import RAW_DIR
 
 class OnchainSignalAnalyst:
     """5선 크립토/비트코인 온체인 신호 분석가 에이전트"""
@@ -52,6 +53,13 @@ class OnchainSignalAnalyst:
             file_path = session_dir / "onchain_signal.md"
             file_path.write_text(signal_content, encoding="utf-8")
             files_created.append(str(file_path))
+            
+            # Obsidian Vault raw/strategy/ 동시 저장 추가
+            strategy_dir = RAW_DIR / "strategy"
+            strategy_dir.mkdir(parents=True, exist_ok=True)
+            obs_path = strategy_dir / f"{session_dir.name}_onchain_signal.md"
+            obs_path.write_text(signal_content, encoding="utf-8")
+            files_created.append(str(obs_path))
             
         except Exception as e:
             err_msg = f"[{self.agent_name}] 온체인 신호 분석 실패: {e}"

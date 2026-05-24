@@ -1,3 +1,5 @@
+← [[Development_Hub|개발 마스터 대시보드]]
+
 # 가상 기업 OS 기반 금융 에이전트 v4.0 완수 보고서 (Walkthrough)
 
 본 보고서는 사용자의 **"Connect-AI v4.0 통합 구현 계획서 R3 검토"** 결과에 기반하여, 런타임 결함 및 구현 상의 모든 지적 사항을 해소하고 가상 기업 OS 환경을 정밀 구축 및 테스트 검증 완료하였음을 입증하는 완수 보고서입니다.
@@ -58,3 +60,6 @@
    - [_company/sessions/2026-05-23T16-46/](file:///C:/Users/jmj/Desktop/안티그래비티/new/_company/sessions/2026-05-23T16-46/) 디렉토리 내에 `db_manager.json` (수치 캐시), `chief_agent.md` (동기식 오케스트레이션 이력), `wiki_manager.md` (합성 완료 로그) 및 `_report.md` (사용자 전송용 요약 카드) 4대 파일이 무손실 백업된 것이 완벽하게 검증되었습니다.
 3. **상시 봇 데몬 재기동 성공 확인 완료**
    - R4의 절대경로와 `DECISIONS_PATH` 및 `CallbackQueryHandler`가 장착된 상시 봇 데몬 프로세스(`telegram_bot.py`)가 백그라운드 태스크로 안전하게 재배치되어 12시간 우선 대기 스케줄 루프로 정상 진입하였습니다.
+
+## 🔗 연관 개발 문서 (Cross References)
+- [[2026-05-23_plan_Connect-AI_v4.0_통합_구현_계획서_R4]]
